@@ -28,8 +28,15 @@ class Deck:
     def cards_left(self):
         print(len(self.cards))
 
+    
     def shuffle_cards(self):
-        random.shuffle(self.cards)
+        for c in range(len(self.cards)):
+
+            r = random.randint(c, len(self.cards) - 1)
+            temp_card = self.cards[r]
+            self.cards[r] = self.cards[c]
+            self.cards[c] = temp_card
+        
 
     @staticmethod
     def make_cards():
@@ -64,6 +71,23 @@ def get_card_category(card):
         return "Högt kort"
 
 
+
+card_values = {
+    2 : 2,
+    3 : 3,
+    4 : 4,
+    5 : 5,
+    6 : 6,
+    7 : 7,
+    8 : 8,
+    9 : 9,
+    10 : 10,
+    "J" : 11,
+    "Q" : 12,
+    "K" : 13,
+    "A" : 14
+}
+
 def play_game():
     player1 = Player("Player1")
     player2 = Player("Player2")
@@ -87,14 +111,26 @@ def play_game():
         cat1 = get_card_category(card1)
         cat2 = get_card_category(card2)
 
+        
+
+
         print(f"{player1.name}: {card1} ({cat1}) | {player2.name}: {card2} ({cat2})")
 
         if cat1 == "Högt kort" and cat2 == "Lågt kort":
-            print(f"-> {player1.name} Vinner!\n")
+            print(f"{player1.name} Vinner!\n")
         elif cat2 == "Högt kort" and cat1 == "Lågt kort":
-            print(f"-> {player2.name} Vinner!\n")
+            print(f"{player2.name} Vinner!\n")
         else:
-            print("-> Oavgjort\n")
+            
+            val1 = card_values[card1.value]
+            val2 = card_values[card2.value]
+
+            if val1 > val2:
+                print(f"{player1.name} Vinner!\n")
+            elif val2 > val1:
+                print(f"{player2.name} Vinner!\n")
+            else:
+                print(f"Oavgjort")
 
         y = input("Vill du spela en runda till? (Y/N): ")
         if y.upper() == "N":
